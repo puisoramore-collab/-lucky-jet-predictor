@@ -57,10 +57,14 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "📈 Ultimele rezultate:\n" +
         str(results[-20:])
-    )
+        
+            )
+
 
 def main():
     token = os.environ["BOT_TOKEN"]
+    webhook_url = os.environ["WEBHOOK_URL"].rstrip("/")
+    secret = os.environ["WEBHOOK_SECRET"]
 
     app = Application.builder().token(token).build()
 
@@ -69,7 +73,15 @@ def main():
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("history", history))
 
-    app.run_polling()
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000)),
+        url_path="telegram",
+        webhook_url=f"{webhook_url}/telegram",
+        secret_token=secret
+    )
+
 
 if __name__ == "__main__":
     main()
+
