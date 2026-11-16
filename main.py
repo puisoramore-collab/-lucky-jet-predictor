@@ -72,7 +72,7 @@ def main():
     app.add_handler(CommandHandler("add", add))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("history", history))
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    
     app.run_webhook(
         listen="0.0.0.0",
         port=int(os.environ.get("PORT", 10000)),
